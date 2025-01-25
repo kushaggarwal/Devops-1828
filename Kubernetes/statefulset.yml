@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: statefulsetworkload
+  namespace: default
+  labels:
+    apps: statefulapp
+spec:
+  selector:
+    matchLabels:
+      app: statefulapp # has to match .spec.template.metadata.labels
+  serviceName: "statefulservice"
+  replicas: 2 # by default is 1
+  template:
+    metadata:
+      labels:
+        app: statefulapp # has to match .spec.selector.matchLabels
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: quarkus-statefulset
+        image: quay.io/rhdevelopers/quarkus-demo:v1
+        ports:
+        - containerPort: 8080
+          name: web
